@@ -1,41 +1,19 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
 
-const useStyles = makeStyles(theme => ({
-  root: {
-    flexGrow: 1,
-    position: "relative"
-  },
-  menuButton: {
-    marginRight: theme.spacing(2),
-  },
-  title: {
-    flexGrow: 1,
-  },
-}));
+export default function AppBar(props) {
+  const links = ["Home", "Chat"]
 
-export default function ButtonAppBar() {
-  const classes = useStyles();
+  links.map(link => {
+    let classes = ["w3-bar-item", "w3-button", "w3-hover-teal"];
+    if (link === props.activeLink) classes.push("w3-light-blue")
+    return <a href="#" class={classes.join(" ")}>{element}</a>
+    // return <a href="#" class="w3-bar-item w3-button w3-hover-teal ">Home</a>
+  })
 
   return (
-    <div className={classes.root}>
-      <AppBar position="static">
-        <Toolbar>
-          {/* <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
-            <MenuIcon />
-          </IconButton> */}
-          <Typography variant="h6" className={classes.title}>
-            DevOpsFu
-          </Typography>
-          <Button color="inherit">Login</Button>
-        </Toolbar>
-      </AppBar>
+    <div class="w3-bar w3-top w3-xlarge w3-indigo">
+      <a href="#" class="w3-bar-item w3-button w3-hover-teal ">Home</a>
+      <a href="#" class="w3-bar-item w3-button w3-hover-teal w3-light-blue">Chat</a>
     </div>
   );
 }

@@ -5,11 +5,12 @@ import AppBar from '../components/Navigation/AppBar/AppBar'
 const layout = props => {
   return (
     <div>
-      <AppBar />
-
+      <div className="w3-row">
+        <AppBar />
+      </div>
+      <div className="w3-row">
         <Chat />
-
-      <Fragment> Footer </Fragment>
+      </div>
     </div>
   )
 }

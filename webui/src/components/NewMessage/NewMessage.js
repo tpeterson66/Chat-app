@@ -1,27 +1,12 @@
 import React from 'react';
 
-import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
-
-
 export default (props) => (
-  <div>
-    <TextField
-      id="filled-full-width"
-      label="New Message"
-      style={{ margin: 8 }}
-      placeholder="Type a new message here!"
-      // helperText="New Message"
-      fullWidth
-      margin="normal"
-      InputLabelProps={{
-        shrink: true,
-      }}
-      variant="outlined" />
-
-    <Button variant="outlined" color="primary">
-      Send
-    </Button>
-
+  <div style={{ marginBottom: "15px", marginLeft: "10px", paddingTop: "15px", paddingBottom: "15px" }} className="w3-row-padding w3-sand w3-bottom">
+    <div class="w3-threequarter">
+      <input class="w3-input w3-border" type="text" placeholder="New Message!!" />
+    </div>
+    <div class="w3-rest">
+      <button class="w3-button w3-green w3-large"><i class="fa fa-paper-plane"></i> Send</button>
+    </div>
   </div>
 );

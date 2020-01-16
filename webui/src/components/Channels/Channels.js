@@ -1,45 +1,14 @@
 import React from 'react';
 import Channel from './Channel/Channel'
 
-// Material
-import { makeStyles } from '@material-ui/core/styles';
-import Drawer from '@material-ui/core/Drawer';
-import Divider from '@material-ui/core/Divider';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-
-const drawerWidth = "25%";
-
-const useStyles = makeStyles(theme => ({
-  root: {
-    display: 'flex',
-    position: "relative"
-  },
-  drawer: {
-    width: drawerWidth,
-    flexShrink: 0,
-  },
-  drawerPaper: {
-    width: drawerWidth,
-  }
-}));
-
-export default function PermanentDrawerLeft() {
-  const classes = useStyles();
+export default function Channels() {
 
   return (
-    <div className={classes.root}>
-      <Drawer
-        className={classes.drawer}
-        variant="permanent"
-        classes={{
-          paper: classes.drawerPaper,
-        }}
-        anchor="left"
-      >
-        <p style={{ padding: "5px", textAlign: "center" }}> <strong>Channels</strong></p>
-        <Divider />
-        <Channel text='General' icon={<InboxIcon />} />
-      </Drawer>
+    <div style={{marginTop: "51px"}} className="w3-sidebar w3-indigo w3-bar-block">
+      <Channel text="General" icon="fa-home" active />
+      <Channel text="Trucking" icon="fa-truck" />
+      <Channel text="Trash" icon="fa-trash" />
+      <Channel text="Planes" icon="fa-plane" />
     </div>
   );
 }
