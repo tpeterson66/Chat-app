@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import Chat from '../containers/Chat/Chat'
 import AppBar from '../components/Navigation/AppBar/AppBar'
 
