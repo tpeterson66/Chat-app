@@ -13,9 +13,9 @@ export default function FixedContainer(props) {
   })
 
   return (
-    <div class="w3-container w3-light-grey" style={{ marginTop: "40px", marginBottom: "8%", overflowY: "scroll"}}>
-      <h1 class="w3-wide w3-text-blue">{props.channel.toUpperCase()}</h1>
-      <ul class="w3-ul w3-card-4">
+    <div className="w3-container w3-light-grey" style={{ marginBottom: "8%", overflowY: "scroll"}}>
+      <h1 className="w3-wide w3-text-blue">{props.channel.toUpperCase()}</h1>
+      <ul className="w3-ul w3-card-4">
         {message}
       </ul>
     </div>

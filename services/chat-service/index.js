@@ -15,9 +15,8 @@ app.use(function (req, res, next) {
   next();
 });
 
-
-app.get('/', function (req, res) {
-  res.sendFile(__dirname + '/web/index.html');
+app.get('/status', (req, res) => {
+  res.send()
 });
 
 app.post('/incoming', (req, res) => {
@@ -61,6 +60,6 @@ io.on('connection', function (socket) {
   });
 });
 
-http.listen(3000, function () {
-  console.log('listening on *:3000');
+http.listen(3001, function () {
+  console.log('listening on *:3001');
 });
