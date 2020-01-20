@@ -1,9 +1,19 @@
 # Chat-app
-NodeJS Webserver that hosts a website that can be used as a chat application. 
+This is a basic chat-app that can be used for demos. It has the following components:
 
-- AIO - All in one, just a single docker container gets the app ready to go. 
-- Plus Mongo - This app uses a mongoDB container as well to store the messages for returning users
-- Plus React - Includes a full frontend seperate from NodeJS. Also includes a MongoDB container.
-- Plus Auth - Includes React, Node and JWT to authenticate users
+1. React Frontend - webui folder
+Setup your local .env file using the env.sample for refrence. This also requires that you have NodeJS and NPM installed. Additionally, make sure you have react-scripts installed globally.
+```
+cd webui
+npm install
+npm start
+```
 
-Checkout the readme for each folder to find more information regarding the deployment and configuration of the apps.
+2. Chat-Service - services/chat-service
+This is the chat API that is used to send, recieve and save/read messages from the MongoDB.
+Setup your .env file using the sample.env file in the folder.
+```
+cd services/chat-service
+npm install
+npm run dev
+```
