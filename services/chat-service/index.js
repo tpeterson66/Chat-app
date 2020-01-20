@@ -1,3 +1,4 @@
+require('dotenv').config()
 const app = require('express')();
 const http = require('http').createServer(app);
 const io = require('socket.io')(http);
@@ -6,6 +7,7 @@ const bodyParser = require('body-parser')
 const MongoClient = require('mongodb').MongoClient;
 ObjectID = require('mongodb').ObjectID;
 const uri = process.env.MONGODB_CONNECTION_STRING || "mongodb://localhost:27017/chat"
+const port = process.env.PORT || 3001
 
 app.use(bodyParser.json())
 
@@ -60,6 +62,6 @@ io.on('connection', function (socket) {
   });
 });
 
-http.listen(3001, function () {
-  console.log('listening on *:3001');
+http.listen(port, function () {
+  console.log(`listening on *:${port}`);
 });
