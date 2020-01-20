@@ -1,20 +1,41 @@
-# All-in-One NodeJS SocketIO Chat Application
-This is a very basic NodeJS application that starts up a nodejs webserver running express and SocketIO. When you navigate to http://ip_address:3000, a static website will be loaded with Javascript used to send messages to the socketIO server.
+# Chat Service
 
-This folder also includes a Dockerfile that can be used to load the nodeJS app in a container.
+## Work in progress
+- Need to add JWT validation and obtain things like username and avatar from the JWT vs. post data.
+- Need to add pagination so that only the newest 10 messages are returned and then allow for scrolling in the frontend, likely a load-more button :)
+- Need to add some SocketIO support in React and then fix it on the API here.
 
-## Docker
-To start the NodeJS application in docker:
+## GET - /status
+returns a 200 code that can be used to check the health of the serivce. Real simple.
 
-Build the new NodeJS application assuming you're running docker build from within the AIO folder.
+## POST - /incoming
+Used to post a new message to the API and save the post to the DB.
+
+Requires:
+- username: String
+- message: String
+- avatar: String(URL)
+
+When added to the database, the following is added:
+- Date
+- _id
+
+Returns error code 400 if there's an error
+Returns 200 and the new message via JSON
+
+## POST - /messages
+Used to get the current messages from the databse.
+
+Requires:
+- channel
+
+Returns 400 if there's an error
+Returns 200 and JSON array of messages if successful
+
+# Starting the service
+Its a simple nodeJS app, so the typical setup process for this one.
 ```
-docker build -t <username>/<app-name> .
+npm install
+npm run dev # for nodemon in dev
+npm start # for node index.js in prod
 ```
-
-Start the new container image by running:
-```
-docker run -p 3000:3000 -d -name chat-app <username>/<app-name>
-```
-
-## Review
-This project was pretty fun. Learned how to create a simple form in Pure JavaScript and then modify it a little bit from the guide I was following. Although it was a simple app, it shows some of the power of SocketIO.

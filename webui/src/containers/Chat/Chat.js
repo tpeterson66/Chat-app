@@ -4,8 +4,8 @@ import Channels from '../../components/Channels/Channels'
 import NewMessage from '../../components/NewMessage/NewMessage'
 import axios from 'axios';
 
-export default () => {
 
+export default () => {
   const [apiData, setApiData] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [channel, setChannel] = useState('general');
@@ -16,7 +16,7 @@ export default () => {
   useEffect(() => {
     console.log('Get messages from server - ' + channel)
     async function fetchData() {
-      await axios.post('http://10.172.192.72:3001/messages', {
+      await axios.post(`${process.env.REACT_APP_BASE_URL}/messages`, {
         channel: channel
       }).then((result) => {
         if (result.data.length <= 0) setNoMessages(true)
@@ -46,7 +46,7 @@ export default () => {
   const sendMessageHandler = () => {
     console.log('Send Message to Server')
     async function fetchData() {
-      await axios.post('http://10.172.192.72:3001/incoming', {
+      await axios.post(`${process.env.REACT_APP_BASE_URL}/incoming`, {
         channel: channel,
         avatar: "https://www.w3schools.com/w3css/img_avatar2.png",
         username: "TopEter",
