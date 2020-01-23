@@ -31,11 +31,9 @@ export default (props) => {
             apiNewUser.avatar = avatar.image
             await axios.post(`${process.env.REACT_APP_AUTH_API}/create`, newUser)
                 .then((result) => {
-                    console.log(result)
                     props.history.push('/chat')
                 })
                 .catch((err) => {
-                    console.log('Error son!')
                     setRegistering(false)
                     // setConnectivityError(false)
                     // setAccountExists(false)
@@ -123,14 +121,14 @@ export default (props) => {
                 <div className="w3-row w3-section">
                     <div className="w3-col" style={{ width: "50px" }}><i className="w3-xxlarge fa fa-lock"></i></div>
                     <div className="w3-rest">
-                        <input onChange={formOnChangeHandler} className="w3-input w3-border" name="password" type="text" placeholder="Password" />
+                        <input onChange={formOnChangeHandler} className="w3-input w3-border" name="password" type="password" placeholder="Password" />
                     </div>
                 </div>
 
                 <div className="w3-row w3-section">
                     <div className="w3-col" style={{ width: "50px" }}><i className="w3-xxlarge fa fa-lock"></i></div>
                     <div className="w3-rest">
-                        <input onChange={formOnChangeHandler} className="w3-input w3-border" name="confirm" type="text" placeholder="Confrim Password" />
+                        <input onChange={formOnChangeHandler} className="w3-input w3-border" name="confirm" type="password" placeholder="Confrim Password" />
                     </div>
                     {passwordMatchValidation}
                 </div>

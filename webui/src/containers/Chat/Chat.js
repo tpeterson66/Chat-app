@@ -14,7 +14,6 @@ export default () => {
   const [channels, setChannels ] = useState([]);
 
   useEffect(() => {
-    console.log('Get messages from server - ' + channel)
     async function fetchData() {
       await axios.post(`${process.env.REACT_APP_CHAT_API}/messages`, {
         channel: channel
@@ -39,12 +38,11 @@ export default () => {
   },[]);
 
   const newMessageOnChangeHandler = (event) => {
-    if (event.keyCode === 13) console.log('enter!')
+    if (event.keyCode === 13) sendMessageHandler()
     setNewMessage(event.target.value)
   }
 
   const sendMessageHandler = () => {
-    console.log('Send Message to Server')
     async function fetchData() {
       await axios.post(`${process.env.REACT_APP_CHAT_API}/incoming`, {
         channel: channel,

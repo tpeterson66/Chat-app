@@ -23,12 +23,10 @@ const Login = (props) => {
         setLoginError(false)
         setConnectivityError(false)
         setLoggingIn(true)
-        console.log(user)
         // API Call to login user
         async function loginUser() {
             await axios.post(`${process.env.REACT_APP_AUTH_API}/login`, user)
                 .then((result) => {
-                    console.log(result)
                     props.history.push('/chat')
                 })
                 .catch((err) => {
@@ -79,7 +77,7 @@ const Login = (props) => {
                 <div className="w3-row w3-section">
                     <div className="w3-col" style={{ width: "50px" }}><i className="w3-xxlarge fa fa-lock"></i></div>
                     <div className="w3-rest">
-                        <input onChange={formOnChangeHandler} className="w3-input w3-border" name="password" type="text" placeholder="Password" />
+                        <input onChange={formOnChangeHandler} className="w3-input w3-border" name="password" type="password" placeholder="Password" />
                     </div>
                 </div>
                 <div className='w3-bar w3-center'>
