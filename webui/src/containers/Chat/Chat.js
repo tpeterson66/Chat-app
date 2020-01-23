@@ -16,7 +16,7 @@ export default () => {
   useEffect(() => {
     console.log('Get messages from server - ' + channel)
     async function fetchData() {
-      await axios.post(`${process.env.REACT_APP_BASE_URL}/messages`, {
+      await axios.post(`${process.env.REACT_APP_CHAT_API}/messages`, {
         channel: channel
       }).then((result) => {
         if (result.data.length <= 0) setNoMessages(true)
@@ -46,7 +46,7 @@ export default () => {
   const sendMessageHandler = () => {
     console.log('Send Message to Server')
     async function fetchData() {
-      await axios.post(`${process.env.REACT_APP_BASE_URL}/incoming`, {
+      await axios.post(`${process.env.REACT_APP_CHAT_API}/incoming`, {
         channel: channel,
         avatar: "https://www.w3schools.com/w3css/img_avatar2.png",
         username: "TopEter",

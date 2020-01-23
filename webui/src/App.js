@@ -5,6 +5,7 @@ import Chat from './containers/Chat/Chat'
 import Blog from './containers/Blog/Blog'
 import Login from './containers/Login/Login'
 import Home from './containers/Home/Home'
+import Register from './containers/Register/Register'
 
 function App() {
   return (
@@ -18,6 +19,8 @@ function App() {
       <Route path="/chat"  component={Chat} />
       <Route path="/blog"  component={Blog} />
       <Route path="/login"  component={Login} />
+      <Route path="/register"  component={Register} />
+
     </div>
   </div>
   );

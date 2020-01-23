@@ -7,7 +7,7 @@ export default function AppBar(props) {
   let links = ["Chat", "Blog", "Login"]
   let linksOutput = links.map((link, index) => {
     return (
-      <NavLink key={index} to={link} activeClassName="w3-light-blue"> <NavItem link={link} />  </NavLink>
+      <NavLink key={index} to={link.toLowerCase()} activeClassName="w3-light-blue"> <NavItem link={link} />  </NavLink>
     )
   });
 
