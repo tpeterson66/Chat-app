@@ -1,11 +1,18 @@
-import React, { useState } from 'react';
-import axios from 'axios';
+import React, { useState, useEffect } from 'react';
+import AuthLogin from '../../authentication-service/login'
+import AuthLogout from '../../authentication-service/logout'
+import Alert from '../../components/UI/Alert/Alert'
 
 const Login = (props) => {
     const [user, setUser] = useState({ email: null, password: null })
     const [connectivityError, setConnectivityError] = useState(false)
     const [loginError, setLoginError] = useState(false)
     const [loggingIn, setLoggingIn] = useState(false)
+
+    useEffect(() => {
+        console.log('logging user out!')
+        AuthLogout()
+    },[])
 
     const formOnChangeHandler = (event) => {
         let copyUser = { ...user }
@@ -23,47 +30,24 @@ const Login = (props) => {
         setLoginError(false)
         setConnectivityError(false)
         setLoggingIn(true)
-        // API Call to login user
-        async function loginUser() {
-            await axios.post(`${process.env.REACT_APP_AUTH_API}/login`, user)
-                .then((result) => {
-                    props.history.push('/chat')
-                })
-                .catch((err) => {
-                    setLoggingIn(false)
-                    if (!err.response) return setConnectivityError(true)
-                    if (err.response.status === 403) return setLoginError(true)
-                })
-        }
-        loginUser()
-    }
 
-    let connectivityErrorMessage = null
-    if (connectivityError) {
-        connectivityErrorMessage = (<div className="w3-panel w3-center w3-pale-red w3-round-xlarge">
-            <p> Cannot access the authentication server, try again soon! </p>
-        </div>)
-    }
+        AuthLogin(user)
+            .then(result => {
+                props.history.push('/chat')
+            })
+            .catch(err => {
+                setLoggingIn(false)
+                if (!err.response) return setConnectivityError(true)
+                if (err.response.status === 403) return setLoginError(true)
+            })
 
-    let loginErrorMessage = null
-    if (loginError) {
-        loginErrorMessage = (<div className="w3-panel w3-center w3-pale-yellow w3-round-xlarge">
-            <p> There's an issue with your login! Please enter valid credentials! </p>
-        </div>)
-    }
-
-    let loggingInMessage = null
-    if (loggingIn) {
-        loggingInMessage = (<div className="w3-panel w3-center w3-pale-green w3-round-xlarge">
-            <p> Logging in!</p>
-        </div>)
     }
 
     return (
         <div>
-            {loggingInMessage}
-            {connectivityErrorMessage}
-            {loginErrorMessage}
+            <Alert type="success" isActive={loggingIn} >Logging in!</Alert>
+            <Alert type="error" isActive={connectivityError}>Cannot access the authentication server, try again soon!</Alert>
+            <Alert type="warning" isActive={loginError}>There's an issue with your login! Please enter valid credentials!</Alert>
             <form onSubmit={handleSubmit} className="w3-container w3-card-4 w3-light-grey w3-text-blue w3-margin">
                 <h2 className="w3-center">Login</h2>
 
@@ -84,7 +68,7 @@ const Login = (props) => {
                     <button className="w3-button w3-green">Login</button>
                 </div>
             </form>
-            
+
         </div>
     )
 }

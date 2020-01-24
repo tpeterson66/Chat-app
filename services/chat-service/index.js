@@ -27,6 +27,7 @@ app.post('/incoming', (req, res) => {
     if (err) throw err;
     var db = client.db('chat');
     db.collection(req.body.channel).insertOne({
+      userID: req.body._id,
       username: req.body.username,
       message: req.body.message,
       avatar: req.body.avatar,

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import AuthRegisterUser from '../../authentication-service/register'
 
 export default (props) => {
 
@@ -20,29 +20,22 @@ export default (props) => {
         event.preventDefault();
         if (!newUser.email || !newUser.password || !newUser.confirm) {
             setRegistrationError(true)
-            // event.preventDefault();
             return
         }
         if (newUser.password !== newUser.confirm) return setRegistrationError(true)
 
-        // API Call to register user!
-        async function registerUser() {
-            let apiNewUser = { ...newUser }
-            apiNewUser.avatar = avatar.image
-            await axios.post(`${process.env.REACT_APP_AUTH_API}/create`, newUser)
-                .then((result) => {
-                    props.history.push('/chat')
-                })
-                .catch((err) => {
-                    setRegistering(false)
-                    // setConnectivityError(false)
-                    // setAccountExists(false)
-                    if (err.response.status === 400 ) return setAccountExists(true);
-                    if (err.response.status === 401) return setConnectivityError(true);
-                    if (!err.response) return setConnectivityError(true);
-                })
-        }
-        registerUser()
+        let apiNewUser = { ...newUser }
+        apiNewUser.avatar = avatar.image
+        AuthRegisterUser(apiNewUser)
+            .then((result) => {
+                props.history.push('/chat')
+            })
+            .catch((err) => {
+                setRegistering(false)
+                if (!err.response) return setConnectivityError(true);
+                if (err.response.status === 400) return setAccountExists(true);
+                if (err.response.status === 401) return setConnectivityError(true);
+            })
     }
 
     let avatars = [

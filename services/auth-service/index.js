@@ -1,5 +1,4 @@
 require('dotenv').config()
-const express = require('express')
 const app = require('express')();
 const http = require('http').createServer(app);
 const bodyParser = require('body-parser')
@@ -51,7 +50,7 @@ function getUserFromDB(collection, email) {
   })
 };
 
-app.post('/create', (req, res) => {
+app.post('/register', (req, res) => {
   getUserFromDB('users', req.body.email)
     .then((result) => { //user already exists with this email!
       res.status(400).send({
