@@ -9,7 +9,6 @@ export default (newUser) => {
                 resolve(result.data)
             })
             .catch((err) => {
-                console.log(err)
                 reject(err)
             })
     })

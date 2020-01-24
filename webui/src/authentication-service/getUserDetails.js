@@ -6,5 +6,6 @@ export default () => {
     } else {
         let userDetails = jwtDecode(localStorage.getItem('access_token'))
         return userDetails
+    
     }
 }

@@ -1,7 +1,6 @@
 import React from 'react';
-import { Route, Redirect } from 'react-router-dom'
+import { Route } from 'react-router-dom'
 import ProtectedRoute from './protectedRoute'
-import AuthIsAuthenticated from './authentication/isAuthenticated'
 import AppBar from './components/Navigation/AppBar/AppBar'
 import Chat from './containers/Chat/Chat'
 import Blog from './containers/Blog/Blog'
@@ -10,8 +9,6 @@ import Home from './containers/Home/Home'
 import Register from './containers/Register/Register'
 
 function App() {
-  console.log(AuthIsAuthenticated())
-
   return (
     <div>
     <div className="w3-row">

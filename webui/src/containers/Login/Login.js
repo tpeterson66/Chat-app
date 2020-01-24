@@ -10,7 +10,6 @@ const Login = (props) => {
     const [loggingIn, setLoggingIn] = useState(false)
 
     useEffect(() => {
-        console.log('logging user out!')
         AuthLogout()
     },[])
 

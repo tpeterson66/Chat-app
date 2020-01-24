@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Alert from '../../components/UI/Alert/Alert'
 import AuthRegisterUser from '../../authentication-service/register'
 
 export default (props) => {
@@ -56,44 +57,11 @@ export default (props) => {
         setAvatar(av)
     }
 
-    let connectivityErrorMessage = null
-    if (connectivityError) {
-        connectivityErrorMessage = (<div className="w3-panel w3-center w3-pale-red w3-round-xlarge">
-            <p> Cannot access the authentication server, try again soon! </p>
-        </div>)
-    }
-
-    let registrationErrorMessage = null
-    if (registrationError) {
-        registrationErrorMessage = (<div className="w3-panel w3-center w3-pale-red w3-round-xlarge">
-            <p> Please provide all the information in the form! </p>
-        </div>)
-    }
-
-    let registeringMessage = null
-    if (registering) {
-        registeringMessage = (<div className="w3-panel w3-center w3-pale-green w3-round-xlarge">
-            <p> Please wait while we sign you up! </p>
-        </div>)
-    }
-
-    let passwordMatchValidation = null;
-    if (newUser.password !== newUser.confirm) passwordMatchValidation = (
-        <p className="w3-center w3-pale-red" > Passwords do not match! </p>
-    )
-
-    let accountExistsMessage = null
-    if (accountExists) {
-        accountExistsMessage = (<div className="w3-panel w3-center w3-pale-yellow w3-round-xlarge">
-            <p> This email address was already used! </p>
-        </div>)
-    }
-
     return (
         <div>
-            {connectivityErrorMessage}
-            {registrationErrorMessage}
-            {accountExistsMessage}
+            <Alert type="error" isActive={connectivityError}>Cannot access the authentication server, try again soon!</Alert>
+            <Alert type="error" isActive={registrationError}>Please provide all the information in the form!</Alert>
+            <Alert type="warning" isActive={accountExists}>This email address was already used!</Alert>
             <form onSubmit={formOnSubmitHandler} className="w3-container w3-card-4 w3-light-grey w3-text-blue w3-margin">
                 <h2 className="w3-center">Register</h2>
 
@@ -123,7 +91,7 @@ export default (props) => {
                     <div className="w3-rest">
                         <input onChange={formOnChangeHandler} className="w3-input w3-border" name="confirm" type="password" placeholder="Confrim Password" />
                     </div>
-                    {passwordMatchValidation}
+                    {newUser.password !== newUser.confirm ? <p className="w3-center w3-pale-red" > Passwords do not match! </p> : null}
                 </div>
 
                 <div className="w3-center">
@@ -133,7 +101,8 @@ export default (props) => {
 
                 <button className="w3-button w3-block w3-section w3-blue w3-ripple w3-padding">Register</button>
             </form>
-            {registeringMessage}
+            <Alert type="success" isActive={registering}>Please wait while we sign you up!</Alert>
+
         </div>
     )
 }
