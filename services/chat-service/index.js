@@ -3,6 +3,7 @@ require('dotenv').config()
 const app = require('express')();
 const http = require('http').createServer(app);
 const io = require('socket.io')(http);
+const jwt = require('jsonwebtoken');
 const moment = require('moment');
 const bodyParser = require('body-parser')
 const MongoClient = require('mongodb').MongoClient;
@@ -11,6 +12,21 @@ const uri = process.env.MONGODB_CONNECTION_STRING || "mongodb://localhost:27017/
 const port = process.env.PORT || 3001
 
 app.use(bodyParser.json())
+
+
+// Verify token on protected routes
+async function isAuthenticated(req, res, next) {
+  if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
+    token = (req.headers.authorization.split(' ')[1]);
+    jwt.verify(token, process.env.JWT_SECRET, function (err, JWTData) {
+      if (err) {
+        res.sendStatus(403)
+      } else {
+        next();
+      };
+    })
+  } else { res.sendStatus(403) }
+}
 
 app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
@@ -22,7 +38,8 @@ app.get('/status', (req, res) => {
   res.send()
 });
 
-app.post('/incoming', (req, res) => {
+app.post('/incoming', isAuthenticated, (req, res) => {
+  console.log(req.body)
   if (!req.body.channel || !req.body.username || !req.body.message || !req.body.avatar) return res.send(401)
   MongoClient.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true }, (err, client) => {
     if (err) throw err;
@@ -43,7 +60,8 @@ app.post('/incoming', (req, res) => {
   })
 });
 
-app.post('/messages', (req, res) => {
+// Messages with JWT Check
+app.post('/messages', isAuthenticated, (req, res) => {
   if (!req.body.channel) res.send(401)
   MongoClient.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true }, (err, client) => {
     if (err) throw err;

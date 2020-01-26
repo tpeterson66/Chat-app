@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import Board from '../../components/Board/Board'
 import Channels from '../../components/Channels/Channels'
 import NewMessage from '../../components/NewMessage/NewMessage'
-import axios from 'axios';
 import ChatGetMessages from '../../chat-service/getMessages'
+import ChatPostMessage from '../../chat-service/postMessage'
 import AuthGetUserDetails from '../../authentication-service/getUserDetails'
 import Alert from '../../components/UI/Alert/Alert'
 
@@ -12,7 +12,6 @@ const Chat = (props) => {
   const [newMessage, setNewMessage] = useState("");
   const [channel, setChannel] = useState('general');
   const [apiError, setApiError] = useState(false);
-  const [noMessages, setNoMessages] = useState(false);
   const [channels, setChannels] = useState([]);
   const [userDetails, setUserDetails] = useState({});
 
@@ -26,14 +25,15 @@ const Chat = (props) => {
     }
   }, [])
 
-// Get messages from DB
+  // Get messages from DB
   useEffect(() => {
     ChatGetMessages(channel)
       .then((result) => {
-        if (result.length <= 0) setNoMessages(true)
+        if (result === null) props.history.push('/login')
         setApiData(result);
         setApiError(false);
       }).catch((err) => {
+        if (err === "no_token") props.history.push('/login');
         setApiError(true);
       })
   }, [channel]);
@@ -54,24 +54,20 @@ const Chat = (props) => {
   }
 
   const sendMessageHandler = () => {
-    async function fetchData() {
-      await axios.post(`${process.env.REACT_APP_CHAT_API}/incoming`, {
-        _id: userDetails._id,
-        channel: channel,
-        avatar: userDetails.avatar,
-        username: userDetails.username,
-        message: newMessage
-      }).then((result) => {
-        let messagesCopy = [...apiData];
-        messagesCopy.push(result.data[0]);
-        setApiData(messagesCopy);
-        setNewMessage('');
-        setNoMessages(false);
-      }).catch((err) => {
-        setApiError(true)
-      })
-    }
-    fetchData();
+    ChatPostMessage({
+      userID: userDetails._id,
+      channel: channel,
+      avatar: userDetails.avatar,
+      username: userDetails.username,
+      message: newMessage
+    }).then((result) => {
+      let messagesCopy = [...apiData];
+      messagesCopy.push(result);
+      setApiData(messagesCopy);
+      setNewMessage('');
+    }).catch((err) => {
+      setApiError(true)
+    })
   };
 
   const onKeyPressHandler = (e) => {
@@ -85,15 +81,14 @@ const Chat = (props) => {
   };
 
   return (
-
     <div className="w3-row">
       <div> <Channels channels={channels} currentChannel={channel} changeChannel={changeChannelHandler} /> </div>
       <div style={{ marginLeft: "200px" }}>
         <Board
           channel={channel}
           messages={apiData} />
-          <Alert isActive={apiError} type="error">Error loading data from the server, check internet connection and try again!</Alert>
-          <Alert isActive={noMessages} type="warning">There's no messages in this channel, start the conversation by sending the first message</Alert>
+        <Alert isActive={apiError} type="error">Error loading data from the server, check internet connection and try again!</Alert>
+        <Alert isActive={apiData.length === 0} type="warning">There's no messages in this channel, start the conversation by sending the first message</Alert>
         <NewMessage
           current={newMessage}
           changed={newMessageOnChangeHandler}
