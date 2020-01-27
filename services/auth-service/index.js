@@ -4,10 +4,15 @@ const http = require('http').createServer(app);
 const bodyParser = require('body-parser')
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const seq = require('seq-logging');
 const uri = process.env.MONGODB_CONNECTION_STRING || "mongodb://localhost:27017/chat"
+const seqServer = process.env.SEQ_SERVER || null
 const port = process.env.PORT || 3002
+var logger = new seq.Logger({ serverUrl: seqServer });
 
 app.use(bodyParser.json())
+// MongoDB Stuff
+var MongoClient = require('mongodb').MongoClient;
 
 app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
@@ -15,8 +20,27 @@ app.use(function (req, res, next) {
   next();
 });
 
-// MongoDB Stuff
-var MongoClient = require('mongodb').MongoClient;
+function logMessageSeq(event) {
+  if (!seqServer) {
+    console.log(event)
+  } else {
+    logger.emit(event)
+  }
+}
+
+// log incomming connection
+app.use(function (req, res, next) {
+  var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+  logMessageSeq({
+    timestamp: new Date(),
+    level: 'Information',
+    messageTemplate: `Incoming request from {ip}`,
+    properties: {
+      ip
+    }
+  });
+  next()
+});
 
 function addUserToDB(collection, document) {
   return new Promise((resolve, reject) => {
@@ -83,7 +107,7 @@ app.post('/register', (req, res) => {
                 username: doc[0].username,
                 _id: doc[0]._id,
                 token,
-                expiresIn: 30*60
+                expiresIn: 30 * 60
               })
             })
             .catch((err) => {
@@ -114,13 +138,13 @@ app.post('/login', (req, res) => {
             _id: user._id,
             username: user.username,
             token,
-            expiresIn: 30*60
+            expiresIn: 30 * 60
           })
         } else {
           res.sendStatus(403)
         }
       });
-    }).catch(err => { res.sendStatus(403)})
+    }).catch(err => { res.sendStatus(403) })
 });
 
 app.get('/status', (req, res) => {
@@ -134,12 +158,12 @@ app.get('/status', (req, res) => {
   checkHeader(req)
     .then(token => {
       jwt.verify(token, process.env.JWT_SECRET, function (err, JWTData) {
-        if (err) {res.send(err)} else {res.send(JWTData)}
+        if (err) { res.send(err) } else { res.send(JWTData) }
       })
     })
     .catch(err => { res.sendStatus(403); console.log(err) })
 });
 
 http.listen(port, function () {
-    console.log(`listening on *:${port}`);
-  });
+  console.log(`listening on *:${port}`);
+});
